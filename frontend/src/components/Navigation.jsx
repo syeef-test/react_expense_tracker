@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 import AuthContext from "../store/auth-context";
-import { Navbar, Container, Nav } from "react-bootstrap";
+import { Navbar, Container, Nav, Button } from "react-bootstrap";
 
 function Navigation() {
   const authCtx = useContext(AuthContext);
@@ -18,19 +18,22 @@ function Navigation() {
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="#home">E-com App</Navbar.Brand>
+        <Navbar.Brand href="#home">Expense Tracker App</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             {!isLoggedIn && <NavLink to="/signup">Signup</NavLink>}
-
             {!isLoggedIn && <NavLink to="/signin">Signin</NavLink>}
             {isLoggedIn && <NavLink to="/profile">Profile</NavLink>}
             {isLoggedIn && (
               <li>
-                <button className="logout-button" onClick={handleLogout}>
+                <Button
+                  variant="danger"
+                  className="logout-button"
+                  onClick={handleLogout}
+                >
                   Logout
-                </button>
+                </Button>
               </li>
             )}
           </Nav>

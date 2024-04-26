@@ -2,6 +2,8 @@ import React, { useRef, useState, useContext } from "react";
 import AuthContext from "../store/auth-context";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 
 function Signin() {
   const emailRef = useRef(null);
@@ -56,21 +58,30 @@ function Signin() {
 
   return (
     <>
-      <div>
-        <h2>Sign In</h2>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="email">Email:</label>
-            <input type="email" id="email" ref={emailRef} required />
-          </div>
-          <div>
-            <label htmlFor="password">Password:</label>
-            <input type="password" id="password" ref={passwordRef} required />
-          </div>
-          <button type="submit" disabled={loading}>
-            {loading ? "Signing In..." : "Sign In"}
-          </button>
-        </form>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <Card style={{ padding: "20px", maxWidth: "400px" }}>
+          <h2>Sign In</h2>
+          <form onSubmit={handleSubmit}>
+            <div>
+              <label htmlFor="email">Email:</label>
+              <input type="email" id="email" ref={emailRef} required />
+            </div>
+            <div>
+              <label htmlFor="password">Password:</label>
+              <input type="password" id="password" ref={passwordRef} required />
+            </div>
+            <Button variant="primary" type="submit" disabled={loading}>
+              {loading ? "Signing In..." : "Sign In"}
+            </Button>
+          </form>
+        </Card>
       </div>
     </>
   );

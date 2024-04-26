@@ -1,5 +1,7 @@
 import React, { useRef, useState } from "react";
 import axios from "axios";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 
 function Signup() {
   const emailRef = useRef(null);
@@ -50,30 +52,39 @@ function Signup() {
   };
 
   return (
-    <div>
-      <h2>Sign Up</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input type="email" id="email" ref={emailRef} required />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input type="password" id="password" ref={passwordRef} required />
-        </div>
-        <div>
-          <label htmlFor="confirm_password">Confirm Password:</label>
-          <input
-            type="password"
-            id="confirm_password"
-            ref={confirm_passwordRef}
-            required
-          />
-        </div>
-        <button type="submit" disabled={loading}>
-          {loading ? "Signing Up..." : "Sign Up"}
-        </button>
-      </form>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      <Card style={{ padding: "20px", maxWidth: "400px" }}>
+        <h2>Sign Up</h2>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="email">Email:</label>
+            <input type="email" id="email" ref={emailRef} required />
+          </div>
+          <div>
+            <label htmlFor="password">Password:</label>
+            <input type="password" id="password" ref={passwordRef} required />
+          </div>
+          <div>
+            <label htmlFor="confirm_password">Confirm Password:</label>
+            <input
+              type="password"
+              id="confirm_password"
+              ref={confirm_passwordRef}
+              required
+            />
+          </div>
+          <Button variant="primary" type="submit" disabled={loading}>
+            {loading ? "Signing Up..." : "Sign Up"}
+          </Button>
+        </form>
+      </Card>
     </div>
   );
 }
