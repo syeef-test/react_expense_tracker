@@ -36,8 +36,10 @@ function Signup() {
         alert("User signed up successfully!");
       }
     } catch (error) {
-      console.error("Error signing up:", error.message);
-      alert(error.message);
+      // console.error("Error signing up:", error.message);
+      // alert(error.message);
+      console.log(error.response.data.error.message);
+      alert(error.response.data.error.message);
     } finally {
       setLoading(false);
     }
