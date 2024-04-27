@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import Signup from "./pages/Signup";
 import Signin from "./pages/Signin";
 import Profile from "./pages/Profile";
+import UpdateProfile from "./pages/UpdateProfile";
 
 function App() {
   return (
@@ -29,6 +30,9 @@ function App() {
             </Route>
             <Route path="/profile">
               <Profile />
+            </Route>
+            <Route path="/update_profile">
+              <UpdateProfile />
             </Route>
             <Route path="*">
               <NotFound />
