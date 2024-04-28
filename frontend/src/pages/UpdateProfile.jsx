@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from "react";
+import React, { useRef, useState, useContext, useEffect } from "react";
 import AuthContext from "../store/auth-context";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
@@ -9,9 +9,41 @@ function UpdateProfile() {
   const fullnameRef = useRef(null);
   const profile_photo_urlRef = useRef(null);
   const [loading, setLoading] = useState(false);
+  const [complete, setComplete] = useState(false);
 
   const authCtx = useContext(AuthContext);
   const history = useHistory();
+
+  const fetchUserInfo = async () => {
+    try {
+      const key = import.meta.env.VITE_FIREBASE_APP_ID;
+      const token = localStorage.getItem("token");
+
+      const response = await axios.post(
+        `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${key}`,
+        {
+          idToken: token,
+        }
+      );
+
+      if (response.status === 200) {
+        //console.log(response.data.users[0].displayName);
+        if (
+          response.data.users[0].displayName &&
+          response.data.users[0].photoUrl
+        ) {
+          setComplete(true);
+        }
+        fullnameRef.current.value = response.data.users[0].displayName;
+        profile_photo_urlRef.current.value = response.data.users[0].photoUrl;
+        console.log("User details fetched!");
+        //alert("User details fetched!");
+      }
+    } catch (error) {
+      console.log(error.response.data.error.message);
+      alert(error.response.data.error.message);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,10 +67,10 @@ function UpdateProfile() {
 
       if (response.status === 200) {
         console.log(response);
-        authCtx.login(response.data.idToken);
+        //authCtx.login(response.data.idToken);
         console.log("User details updated successfully!");
         alert("User details updated successfully!");
-        history.push("/profile");
+        //history.push("/profile");
       }
     } catch (error) {
       //console.log(error);
@@ -54,8 +86,21 @@ function UpdateProfile() {
     profile_photo_urlRef.current.value = "";
   };
 
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
   return (
     <>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <h3>Profile is {complete ? "complete" : "incomplete"}</h3>
+      </div>
       <div
         style={{
           display: "flex",
