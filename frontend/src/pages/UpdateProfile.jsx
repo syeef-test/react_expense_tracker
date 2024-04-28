@@ -33,10 +33,11 @@ function UpdateProfile() {
           response.data.users[0].photoUrl
         ) {
           setComplete(true);
+          fullnameRef.current.value = response.data.users[0].displayName;
+          profile_photo_urlRef.current.value = response.data.users[0].photoUrl;
+          console.log("User details fetched!");
         }
-        fullnameRef.current.value = response.data.users[0].displayName;
-        profile_photo_urlRef.current.value = response.data.users[0].photoUrl;
-        console.log("User details fetched!");
+
         //alert("User details fetched!");
       }
     } catch (error) {
