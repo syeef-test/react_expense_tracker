@@ -5,47 +5,39 @@ import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 
-function Signin() {
+function ForgetPassword() {
   const emailRef = useRef(null);
-  const passwordRef = useRef(null);
+
   const [loading, setLoading] = useState(false);
 
-  const authCtx = useContext(AuthContext);
   const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const email = emailRef.current.value;
-    const password = passwordRef.current.value;
 
     const key = import.meta.env.VITE_FIREBASE_APP_ID;
     try {
       setLoading(true);
       const response = await axios.post(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${key}`,
+        `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${key}`,
         {
+          requestType: "PASSWORD_RESET",
           email: email,
-          password: password,
-          returnSecureToken: true,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       );
 
       if (response.status === 200) {
         console.log(response);
-        authCtx.login(response.data.idToken);
-        console.log("User signed in successfully!");
-        alert("User signed in successfully!");
-        history.push("/profile");
+        // authCtx.login(response.data.idToken);
+        // console.log("User signed in successfully!");
+        alert("Password reset mail sent");
+        //history.push("/profile");
       }
     } catch (error) {
-      //console.log(error);
-      console.log(error.response.data.error.message);
-      alert(error.response.data.error.message);
+      console.log(error);
+      //   console.log(error.response.data.error.message);
+      //   alert(error.response.data.error.message);
       //console.error("Error signing up:", error.message);
       //alert(error.response.data.message);
     } finally {
@@ -53,7 +45,6 @@ function Signin() {
     }
 
     emailRef.current.value = "";
-    passwordRef.current.value = "";
   };
 
   return (
@@ -67,25 +58,22 @@ function Signin() {
         }}
       >
         <Card style={{ padding: "20px", maxWidth: "400px" }}>
-          <h2>Sign In</h2>
+          <h2>Forget Password</h2>
           <form onSubmit={handleSubmit}>
             <div>
               <label htmlFor="email">Email:</label>
               <input type="email" id="email" ref={emailRef} required />
             </div>
-            <div>
-              <label htmlFor="password">Password:</label>
-              <input type="password" id="password" ref={passwordRef} required />
-            </div>
+
             <Button variant="primary" type="submit" disabled={loading}>
-              {loading ? "Signing In..." : "Sign In"}
+              {loading ? "Reseting Password..." : "Reset Password"}
             </Button>
           </form>
-          <Link to="/forget_password">Forget Password ?</Link>
+          <Link to="/signin">Sign in</Link>
         </Card>
       </div>
     </>
   );
 }
 
-export default Signin;
+export default ForgetPassword;
