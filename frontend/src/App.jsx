@@ -15,6 +15,7 @@ import Signin from "./pages/Signin";
 import Profile from "./pages/Profile";
 import UpdateProfile from "./pages/UpdateProfile";
 import ForgetPassword from "./pages/ForgetPassword";
+import AddExpense from "./pages/AddExpense";
 
 function App() {
   return (
@@ -37,6 +38,9 @@ function App() {
             </Route>
             <Route path="/forget_password">
               <ForgetPassword />
+            </Route>
+            <Route path="/add_expense">
+              <AddExpense />
             </Route>
             <Route path="*">
               <NotFound />

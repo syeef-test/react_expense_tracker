@@ -75,6 +75,7 @@ function Profile() {
       <Button variant="primary" onClick={sendEmailVerification}>
         Verify Email
       </Button>
+      <Link to="/add_expense">Add Expense</Link>
     </>
   );
 }
