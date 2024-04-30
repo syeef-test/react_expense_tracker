@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
@@ -26,7 +26,15 @@ function AddExpense() {
 
     console.log(obj);
     expenseContext.addExpense(obj);
+
+    amountRef.current.value = "";
+    descRef.current.value = "";
+    categoryRef.current.value = "";
   };
+
+  // useEffect(() => {
+  //   expenseContext.fetchExpense();
+  // }, []);
   return (
     <>
       <div
@@ -69,12 +77,20 @@ function AddExpense() {
         <div>
           <h3>Expenses</h3>
           <ul>
-            {expenseContext.expenses.map((expense, index) => (
+            {/* {expenseContext.expenses.map((expense, index) => (
               <li key={index}>
                 Amount: {expense.exp_amount}, Description: {expense.exp_desc},
                 Category: {expense.exp_category}
               </li>
-            ))}
+            ))} */}
+            {expenseContext.expenses &&
+              Object.keys(expenseContext.expenses).map((expenseKey) => (
+                <li key={expenseKey}>
+                  Amount: {expenseContext.expenses[expenseKey].exp_amount},
+                  Description: {expenseContext.expenses[expenseKey].exp_desc},
+                  Category: {expenseContext.expenses[expenseKey].exp_category}
+                </li>
+              ))}
           </ul>
         </div>
       </div>
