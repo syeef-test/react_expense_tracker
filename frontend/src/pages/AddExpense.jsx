@@ -9,6 +9,7 @@ function AddExpense() {
   const descRef = useRef(null);
   const categoryRef = useRef(null);
   const [loading, setLoading] = useState(false);
+  const [editExpenseId, setEditExpenseId] = useState(null);
 
   const expenseContext = useContext(ExpenseContext);
 
@@ -24,12 +25,31 @@ function AddExpense() {
       exp_category: category,
     };
 
-    console.log(obj);
-    expenseContext.addExpense(obj);
+    if (editExpenseId !== null) {
+      expenseContext.updateExpense(editExpenseId, obj);
+      setEditExpenseId(null);
+    } else {
+      console.log(obj);
+      expenseContext.addExpense(obj);
+    }
 
     amountRef.current.value = "";
     descRef.current.value = "";
     categoryRef.current.value = "";
+  };
+
+  const editHandler = (itemId) => {
+    console.log("edit", itemId);
+    setEditExpenseId(itemId);
+    const expense = expenseContext.expenses[itemId];
+    amountRef.current.value = expense.exp_amount;
+    descRef.current.value = expense.exp_desc;
+    categoryRef.current.value = expense.exp_category;
+  };
+
+  const deleteHandler = (itemId) => {
+    console.log("delete", itemId);
+    expenseContext.removeExpense(itemId);
   };
 
   // useEffect(() => {
@@ -89,6 +109,18 @@ function AddExpense() {
                   Amount: {expenseContext.expenses[expenseKey].exp_amount},
                   Description: {expenseContext.expenses[expenseKey].exp_desc},
                   Category: {expenseContext.expenses[expenseKey].exp_category}
+                  <Button
+                    variant="success"
+                    onClick={() => editHandler(expenseKey)}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => deleteHandler(expenseKey)}
+                  >
+                    Delete
+                  </Button>
                 </li>
               ))}
           </ul>

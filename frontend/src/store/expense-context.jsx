@@ -4,8 +4,9 @@ import axios from "axios";
 const ExpenseContext = React.createContext({
   expenses: "",
   addExpense: (obj) => {},
-  removeExpense: (obj) => {},
+  removeExpense: (objid) => {},
   fetchExpense: () => {},
+  updateExpense: (itemId, obj) => {},
 });
 
 export const ExpenseContextProvider = (props) => {
@@ -49,8 +50,47 @@ export const ExpenseContextProvider = (props) => {
     console.log(expense);
   }, []);
 
-  const removeExpenseHandler = () => {
-    alert("remove expense");
+  const removeExpenseHandler = async (itemId) => {
+    try {
+      const response = await axios.delete(
+        `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses/${itemId}.json`
+      );
+      console.log("context", response.status);
+      if (response.status === 200) {
+        // alert("Expense Added Succesfully");
+        //console.log(response);
+        console.log("Expense Deleted");
+        fetchExpenseHandler();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateExpenseHandler = async (itemId, item) => {
+    try {
+      console.log("context", itemId);
+      console.log("context", item);
+
+      const obj = {
+        exp_amount: item.exp_amount,
+        exp_desc: item.exp_desc,
+        exp_category: item.exp_category,
+      };
+      const response = await axios.put(
+        `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses/${itemId}.json`,
+        item
+      );
+      //console.log("context", response);
+      if (response.status === 200) {
+        // alert("Expense Added Succesfully");
+        //console.log(response);
+        console.log("Expense Updated");
+        fetchExpenseHandler();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const contextValue = {
@@ -58,6 +98,7 @@ export const ExpenseContextProvider = (props) => {
     addExpense: addExpenseHandler,
     removeExpense: removeExpenseHandler,
     fetchExpense: fetchExpenseHandler,
+    updateExpense: updateExpenseHandler,
   };
 
   useEffect(() => {
