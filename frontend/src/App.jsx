@@ -17,22 +17,20 @@ import UpdateProfile from "./pages/UpdateProfile";
 import ForgetPassword from "./pages/ForgetPassword";
 import AddExpense from "./pages/AddExpense";
 
+import { useSelector } from "react-redux";
+
 function App() {
+  const isAuth = useSelector((state) => state.auth.isAuthenticated);
+
   return (
     <>
       <Router>
         <div>
           <Navigation />
           <Switch>
-            <Route path="/signup">
-              <Signup />
-            </Route>
-            <Route path="/signin">
-              <Signin />
-            </Route>
-            <Route path="/profile">
-              <Profile />
-            </Route>
+            <Route path="/signup">{!isAuth && <Signup />}</Route>
+            <Route path="/signin">{!isAuth && <Signin />}</Route>
+            <Route path="/profile">{isAuth && <Profile />}</Route>
             <Route path="/update_profile">
               <UpdateProfile />
             </Route>

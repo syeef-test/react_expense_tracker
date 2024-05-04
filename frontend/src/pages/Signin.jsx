@@ -5,12 +5,16 @@ import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 
+import { authActions } from "../store/auth-reducer";
+import { useDispatch } from "react-redux";
+
 function Signin() {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
   const [loading, setLoading] = useState(false);
 
-  const authCtx = useContext(AuthContext);
+  //const authCtx = useContext(AuthContext);
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const handleSubmit = async (e) => {
@@ -27,25 +31,22 @@ function Signin() {
           email: email,
           password: password,
           returnSecureToken: true,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       );
 
       if (response.status === 200) {
-        console.log(response);
-        authCtx.login(response.data.idToken);
+        //console.log(response);
+
+        dispatch(authActions.login(response.data));
+        // authCtx.login(response.data.idToken);
         console.log("User signed in successfully!");
         alert("User signed in successfully!");
         history.push("/profile");
       }
     } catch (error) {
       //console.log(error);
-      console.log(error.response.data.error.message);
-      alert(error.response.data.error.message);
+      //console.log(error.response.data.error.message);
+      alert(error);
       //console.error("Error signing up:", error.message);
       //alert(error.response.data.message);
     } finally {
