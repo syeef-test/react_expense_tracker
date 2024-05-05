@@ -4,57 +4,128 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import ExpenseContext from "../store/expense-context";
 
+import { useSelector, useDispatch } from "react-redux";
+import { expenseActions } from "../store/expense-reducer";
+
 function AddExpense() {
   const amountRef = useRef(null);
   const descRef = useRef(null);
   const categoryRef = useRef(null);
   const [loading, setLoading] = useState(false);
   const [editExpenseId, setEditExpenseId] = useState(null);
+  //const [expense, setExpense] = useState(null);
+  const [totalExpense, setTotalExpense] = useState(null);
 
-  const expenseContext = useContext(ExpenseContext);
+  const dispatch = useDispatch();
+  const expenses = useSelector((state) => state.expense.expenses);
+  //console.log("map", expenses);
+
+  //const expenseContext = useContext(ExpenseContext);
+
+  const fetchExpenseHandler = async () => {
+    try {
+      const response = await axios.get(
+        "https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses.json"
+      );
+      // console.log(response);
+      if (response.status === 200) {
+        // alert("Expense Added Succesfully");
+        console.log(response);
+        //setExpense(response.data);
+        calculateTotalExpense(response.data);
+        dispatch(expenseActions.addExpense(response.data));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchExpenseHandler();
+  }, []);
+
+  const calculateTotalExpense = (expenses) => {
+    let total = 0;
+    for (const key in expenses) {
+      total += parseFloat(expenses[key].exp_amount);
+    }
+    setTotalExpense(total.toFixed(2));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const amount = amountRef.current.value;
-    const desc = descRef.current.value;
-    const category = categoryRef.current.value;
+    try {
+      const amount = amountRef.current.value;
+      const desc = descRef.current.value;
+      const category = categoryRef.current.value;
 
-    const obj = {
-      exp_amount: amount,
-      exp_desc: desc,
-      exp_category: category,
-    };
+      const obj = {
+        exp_amount: amount,
+        exp_desc: desc,
+        exp_category: category,
+      };
 
-    if (editExpenseId !== null) {
-      expenseContext.updateExpense(editExpenseId, obj);
-      setEditExpenseId(null);
-    } else {
-      console.log(obj);
-      expenseContext.addExpense(obj);
+      if (editExpenseId !== null) {
+        //expenseContext.updateExpense(editExpenseId, obj);
+
+        const response = await axios.put(
+          `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses/${editExpenseId}.json`,
+          obj
+        );
+        //console.log("context", response);
+        if (response.status === 200) {
+          // alert("Expense Added Succesfully");
+          //console.log(response);
+          console.log("Expense Updated");
+          fetchExpenseHandler();
+          setEditExpenseId(null);
+        }
+      } else {
+        const response = await axios.post(
+          "https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses.json",
+          obj
+        );
+
+        if (response.status === 200) {
+          alert("Expense Added Succesfully");
+          fetchExpenseHandler();
+        }
+
+        amountRef.current.value = "";
+        descRef.current.value = "";
+        categoryRef.current.value = "";
+      }
+    } catch (error) {
+      console.log(error);
     }
-
-    amountRef.current.value = "";
-    descRef.current.value = "";
-    categoryRef.current.value = "";
   };
 
   const editHandler = (itemId) => {
     console.log("edit", itemId);
     setEditExpenseId(itemId);
-    const expense = expenseContext.expenses[itemId];
-    amountRef.current.value = expense.exp_amount;
-    descRef.current.value = expense.exp_desc;
-    categoryRef.current.value = expense.exp_category;
+    const exp = expenses[itemId];
+    amountRef.current.value = exp.exp_amount;
+    descRef.current.value = exp.exp_desc;
+    categoryRef.current.value = exp.exp_category;
   };
 
-  const deleteHandler = (itemId) => {
-    console.log("delete", itemId);
-    expenseContext.removeExpense(itemId);
+  const deleteHandler = async (itemId) => {
+    try {
+      const response = await axios.delete(
+        `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses/${itemId}.json`
+      );
+      console.log("context", response.status);
+      if (response.status === 200) {
+        // alert("Expense Added Succesfully");
+        //console.log(response);
+        console.log("Expense Deleted");
+        fetchExpenseHandler();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  // useEffect(() => {
-  //   expenseContext.fetchExpense();
-  // }, []);
   return (
     <>
       <div
@@ -95,20 +166,20 @@ function AddExpense() {
         </div>
 
         <div>
+          <div>
+            <h2>
+              Total Expneses:{totalExpense}{" "}
+              {totalExpense > 10000 && <Button variant="info">Premiuem</Button>}
+            </h2>
+          </div>
           <h3>Expenses</h3>
           <ul>
-            {/* {expenseContext.expenses.map((expense, index) => (
-              <li key={index}>
-                Amount: {expense.exp_amount}, Description: {expense.exp_desc},
-                Category: {expense.exp_category}
-              </li>
-            ))} */}
-            {expenseContext.expenses &&
-              Object.keys(expenseContext.expenses).map((expenseKey) => (
+            {expenses &&
+              Object.keys(expenses).map((expenseKey) => (
                 <li key={expenseKey}>
-                  Amount: {expenseContext.expenses[expenseKey].exp_amount},
-                  Description: {expenseContext.expenses[expenseKey].exp_desc},
-                  Category: {expenseContext.expenses[expenseKey].exp_category}
+                  Amount: {expenses[expenseKey].exp_amount}, Description:{" "}
+                  {expenses[expenseKey].exp_desc}, Category:{" "}
+                  {expenses[expenseKey].exp_category}
                   <Button
                     variant="success"
                     onClick={() => editHandler(expenseKey)}

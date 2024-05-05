@@ -1,29 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialCounterState = { counter: 0, showCounter: true };
+const initialExpenseState = { expenses: "" };
 
-const counterSlice = createSlice({
-  name: "counter",
-  initialState: initialCounterState,
+const expenseSlice = createSlice({
+  name: "expense",
+  initialState: initialExpenseState,
   reducers: {
-    increment(state) {
-      state.counter++;
+    addExpense(state, action) {
+      // console.log("reduxers", action.payload);
+      state.expenses = action.payload;
     },
-    decrement(state) {
-      state.counter--;
-    },
-    increase(state, action) {
-      state.counter = state.counter + action.payload;
-    },
-    decrease(state, action) {
-      state.counter = state.counter - action.payload;
-    },
-    toggleCounter(state) {
-      state.showCounter = !state.showCounter;
+    removeExpense(state) {
+      console.log("remove");
     },
   },
 });
 
-export const counterActions = counterSlice.actions;
+export const expenseActions = expenseSlice.actions;
 
-export default counterSlice.reducer;
+export default expenseSlice.reducer;
