@@ -21,11 +21,12 @@ import { useSelector } from "react-redux";
 
 function App() {
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
+  const theme = useSelector((state) => state.theme.darkMode);
 
   return (
     <>
       <Router>
-        <div>
+        <div className={theme ? "dark" : "light"}>
           <Navigation />
           <Switch>
             <Route path="/signup">{!isAuth && <Signup />}</Route>

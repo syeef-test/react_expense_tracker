@@ -5,18 +5,16 @@ import { Navbar, Container, Nav, Button } from "react-bootstrap";
 
 import { useSelector, useDispatch } from "react-redux";
 import { authActions } from "../store/auth-reducer";
+import { toggleTheme } from "../store/theme-reducer";
 
 function Navigation() {
-  //const authCtx = useContext(AuthContext);
-  // const isLoggedIn = authCtx.isLoggedIn;
   const history = useHistory();
 
   const dispatch = useDispatch();
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
+  const darkMode = useSelector((state) => state.theme.darkMode);
 
   const handleLogout = () => {
-    //authCtx.logout();
-    // console.log("logout succesful");
     dispatch(authActions.logout());
     alert("logout succesful");
     history.push("/signin");
@@ -44,6 +42,8 @@ function Navigation() {
               </li>
             )}
           </Nav>
+          <h4>{darkMode ? "Dark" : "Light"} Theme</h4>
+          <button onClick={() => dispatch(toggleTheme())}>Toggle Theme</button>
         </Navbar.Collapse>
         <ul></ul>
       </Container>
