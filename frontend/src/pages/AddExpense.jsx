@@ -126,6 +126,33 @@ function AddExpense() {
     }
   };
 
+  function makeCSV(rows) {
+    return rows.map((r) => r.join(",")).join("\n");
+  }
+
+  const exportToCSV = () => {
+    console.log("csv:", expenses);
+
+    const objectArray = Object.values(expenses);
+    console.log("values", objectArray);
+
+    function makeCSV(rows) {
+      return rows.map((r) => r.join(",")).join("\n");
+    }
+
+    const keys = objectArray.map((obj) => Object.keys(obj));
+    const values = objectArray.map((obj) => Object.values(obj));
+    let new_array = [];
+    new_array.push(keys[0]);
+    // new_array.push(values);
+    values.forEach((value) => new_array.push(value));
+    console.log(new_array);
+
+    const a2 = document.getElementById("a2");
+    const blob2 = new Blob([makeCSV(new_array)]);
+    a2.href = URL.createObjectURL(blob2);
+  };
+
   return (
     <>
       <div
@@ -170,6 +197,12 @@ function AddExpense() {
             <h2>
               Total Expneses:{totalExpense}{" "}
               {totalExpense > 10000 && <Button variant="info">Premiuem</Button>}
+              <Button variant="success" onClick={exportToCSV}>
+                Export to CSV
+              </Button>
+              <a id="a2" download="expenses.csv">
+                Download CSV File
+              </a>
             </h2>
           </div>
           <h3>Expenses</h3>
