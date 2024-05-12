@@ -4,6 +4,7 @@ import { MemoryRouter } from "react-router"; //add to fix error of link
 
 import { Provider } from "react-redux";
 import store from "../store/index.js";
+import userEvent from "@testing-library/user-event";
 
 describe("Add Expense", () => {
   it("Check the add expense form visibility", () => {
@@ -34,4 +35,23 @@ describe("Add Expense", () => {
     const totalElement = screen.getByText("Total Expneses:");
     expect(totalElement).toBeVisible;
   });
+
+  // it("check loading state of add expense button", () => {
+  //   render(
+  //     <Provider store={store}>
+  //       <MemoryRouter>
+  //         <AddExpense />
+  //       </MemoryRouter>
+  //     </Provider>
+  //   );
+
+  //   const signinElement = screen.getByText("Add Expense");
+  //   userEvent.click(signinElement);
+
+  //   const outputElement = screen.queryByText("Adding Expense...", {
+  //     exact: true,
+  //   });
+  //   //expect(outputElement).toBeNull();
+  //   expect(outputElement).toBeVisible;
+  // });
 });

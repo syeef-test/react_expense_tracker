@@ -4,6 +4,7 @@ import { MemoryRouter } from "react-router"; //add to fix error of link
 
 import { Provider } from "react-redux";
 import store from "../store/index.js";
+import userEvent from "@testing-library/user-event";
 
 describe("Signup", () => {
   it("Check the email and password visibility", () => {
@@ -33,5 +34,23 @@ describe("Signup", () => {
 
     const confirmPasswordElement = screen.getByText("Confirm Password:");
     expect(confirmPasswordElement).toBeVisible;
+  });
+  it("check loading state of signup button", () => {
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <Signup />
+        </MemoryRouter>
+      </Provider>
+    );
+
+    const signupElement = screen.getByRole("button");
+    userEvent.click(signupElement);
+
+    const outputElement = screen.queryByText("Signing Up...", {
+      exact: true,
+    });
+    //expect(outputElement).toBeNull();
+    expect(outputElement).toBeVisible;
   });
 });
