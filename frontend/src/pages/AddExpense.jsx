@@ -2,7 +2,6 @@ import React, { useContext, useRef, useState, useEffect } from "react";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import ExpenseContext from "../store/expense-context";
 
 import { useSelector, useDispatch } from "react-redux";
 import { expenseActions } from "../store/expense-reducer";
@@ -19,8 +18,6 @@ function AddExpense() {
   const dispatch = useDispatch();
   const expenses = useSelector((state) => state.expense.expenses);
   //console.log("map", expenses);
-
-  //const expenseContext = useContext(ExpenseContext);
 
   const fetchExpenseHandler = async () => {
     try {
@@ -66,8 +63,6 @@ function AddExpense() {
       };
 
       if (editExpenseId !== null) {
-        //expenseContext.updateExpense(editExpenseId, obj);
-
         const response = await axios.put(
           `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses/${editExpenseId}.json`,
           obj

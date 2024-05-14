@@ -1,5 +1,5 @@
 import React, { useRef, useState, useContext } from "react";
-import AuthContext from "../store/auth-context";
+
 import { useHistory, Link } from "react-router-dom";
 import axios from "axios";
 import Button from "react-bootstrap/Button";
@@ -13,7 +13,6 @@ function Signin() {
   const passwordRef = useRef(null);
   const [loading, setLoading] = useState(false);
 
-  //const authCtx = useContext(AuthContext);
   const dispatch = useDispatch();
   const history = useHistory();
 

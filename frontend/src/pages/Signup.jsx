@@ -8,6 +8,7 @@ function Signup() {
   const passwordRef = useRef(null);
   const confirm_passwordRef = useRef(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,11 +26,6 @@ function Signup() {
           email: email,
           password: password,
           returnSecureToken: true,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
         }
       );
 
@@ -40,6 +36,7 @@ function Signup() {
     } catch (error) {
       // console.error("Error signing up:", error.message);
       // alert(error.message);
+      setError(error);
       console.log(error.response.data.error.message);
       alert(error.response.data.error.message);
     } finally {
