@@ -66,15 +66,18 @@ function Profile() {
   useEffect(() => {
     checkEmailVerification();
   }, []);
+
   return (
     <>
       <h1>Welcome to Expense Tracker</h1>
       <p>Your Profile is incomplete </p>
       <Link to="/update_profile">Complete Now</Link>
       <p>Your email is {emailVerified ? "verified" : "not verified"}</p>
-      <Button variant="primary" onClick={sendEmailVerification}>
-        Verify Email
-      </Button>
+      {!emailVerified && (
+        <Button variant="primary" onClick={sendEmailVerification}>
+          Verify Email
+        </Button>
+      )}
       <Link to="/add_expense">Add Expense</Link>
     </>
   );

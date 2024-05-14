@@ -13,16 +13,16 @@ function AddExpense() {
   const [loading, setLoading] = useState(false);
   const [editExpenseId, setEditExpenseId] = useState(null);
   //const [expense, setExpense] = useState(null);
-  const [totalExpense, setTotalExpense] = useState(null);
+  const [totalExpense, setTotalExpense] = useState(0);
 
   const dispatch = useDispatch();
   const expenses = useSelector((state) => state.expense.expenses);
   //console.log("map", expenses);
-
+  const email = localStorage.getItem("email");
   const fetchExpenseHandler = async () => {
     try {
       const response = await axios.get(
-        "https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses.json"
+        `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses.json`
       );
       // console.log(response);
       if (response.status === 200) {
@@ -61,7 +61,7 @@ function AddExpense() {
         exp_desc: desc,
         exp_category: category,
       };
-
+      const email = localStorage.getItem("email");
       if (editExpenseId !== null) {
         const response = await axios.put(
           `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses/${editExpenseId}.json`,
@@ -77,7 +77,7 @@ function AddExpense() {
         }
       } else {
         const response = await axios.post(
-          "https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses.json",
+          `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses.json`,
           obj
         );
 
@@ -106,6 +106,7 @@ function AddExpense() {
 
   const deleteHandler = async (itemId) => {
     try {
+      const email = localStorage.getItem("email");
       const response = await axios.delete(
         `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses/${itemId}.json`
       );
@@ -121,9 +122,9 @@ function AddExpense() {
     }
   };
 
-  function makeCSV(rows) {
-    return rows.map((r) => r.join(",")).join("\n");
-  }
+  // function makeCSV(rows) {
+  //   return rows.map((r) => r.join(",")).join("\n");
+  // }
 
   const exportToCSV = () => {
     console.log("csv:", expenses);
@@ -189,16 +190,20 @@ function AddExpense() {
 
         <div>
           <div>
-            <h2>
-              Total Expneses:{totalExpense}{" "}
+            <h2>Total Expense:{totalExpense}</h2>
+            <div>
               {totalExpense > 10000 && <Button variant="info">Premiuem</Button>}
-              <Button variant="success" onClick={exportToCSV}>
-                Export to CSV
-              </Button>
-              <a id="a2" download="expenses.csv">
-                Download CSV File
-              </a>
-            </h2>
+              {totalExpense > 10000 && (
+                <Button variant="success" onClick={exportToCSV}>
+                  Export to CSV
+                </Button>
+              )}
+              {totalExpense > 10000 && (
+                <a id="a2" download="expenses.csv">
+                  Download CSV File
+                </a>
+              )}
+            </div>
           </div>
           <h3>Expenses</h3>
           <ul>

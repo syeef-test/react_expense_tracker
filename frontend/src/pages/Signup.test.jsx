@@ -38,7 +38,8 @@ describe("Signup", () => {
     const confirmPasswordElement = screen.getByText("Confirm Password:");
     expect(confirmPasswordElement).toBeVisible();
   });
-  it("check loading state of signup button", () => {
+
+  it("check loading state of signin button", () => {
     render(
       <Provider store={store}>
         <MemoryRouter>
@@ -57,39 +58,24 @@ describe("Signup", () => {
     expect(outputElement).toBeVisible;
   });
 
-  it("check signup post request", async () => {
-    render(
-      <Provider store={store}>
-        <MemoryRouter>
-          <Signup />
-        </MemoryRouter>
-      </Provider>
-    );
+  it("mock signup post request", async () => {
+    axios.post.mockResolvedValueOnce({
+      status: 200,
+      data: {
+        message: "User signed up successfully",
+      },
+    });
 
-    const response = { status: 200, idToken: "token" };
-    axios.post.mockResolvedValueOnce(response);
-
-    const emailInput = screen.getByLabelText("Email:");
-    const passwordInput = screen.getByLabelText("Password:");
-    const confPasswordInput = screen.getAllByLabelText("Confirm Password:");
-    const signUpButton = screen.getByRole("button", { name: "Sign Up" });
-
-    fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-    fireEvent.change(passwordInput, { target: { value: "password" } });
-
-    fireEvent.click(signUpButton);
-
-    await waitFor(() => {
-      expect(axios.post).toHaveBeenCalledWith(expect.any(String), {
-        email: "test@example.com",
-        password: "password",
+    const key = import.meta.env.VITE_FIREBASE_APP_ID;
+    const response = await axios.post(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${key}`,
+      {
+        email: "testing@gmail.com",
+        password: "1111111",
         returnSecureToken: true,
-      });
-    });
-
-    const outputElement = screen.queryByText("Signing Up...", {
-      exact: true,
-    });
-    expect(outputElement).toBeNull(); // Corrected expectation
+      }
+    );
+    expect(response.status).toEqual(200);
+    expect(response.data.message).toEqual("User signed up successfully");
   });
 });

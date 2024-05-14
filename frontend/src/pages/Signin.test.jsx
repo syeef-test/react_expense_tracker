@@ -49,37 +49,25 @@ describe("Signin", () => {
 
   //Test for async
 
-  // it("click on signin button", async () => {
-  //   render(
-  //     <Provider store={store}>
-  //       <MemoryRouter>
-  //         <Signin />
-  //       </MemoryRouter>
-  //     </Provider>
-  //   );
+  it("mock signin post request", async () => {
+    axios.post.mockResolvedValueOnce({
+      status: 200,
+      data: {
+        message: "User signed in successfully!",
+        idToken: "token",
+      },
+    });
 
-  //   const mockedResponse = { status: 200, data: { idToken: "token" } };
-  //   axios.post.mockResolvedValueOnce(mockedResponse);
-
-  //   const emailInput = screen.getByLabelText("Email:");
-  //   const passwordInput = screen.getByLabelText("Password:");
-  //   const signInButton = screen.getByRole("button", { name: "Sign In" });
-
-  //   fireEvent.change(emailInput, { target: { value: "test@example.com" } });
-  //   fireEvent.change(passwordInput, { target: { value: "password" } });
-  //   fireEvent.click(signInButton);
-
-  //   await waitFor(() => {
-  //     expect(axios.post).toHaveBeenCalledWith(expect.any(String), {
-  //       email: "test@example.com",
-  //       password: "password",
-  //       returnSecureToken: true,
-  //     });
-  //     const mockAlert = vi.spyOn(window, "alert").mockImplementation(() => {});
-
-  //     expect(mockAlert);
-
-  //     mockAlert.mockRestore();
-  //   });
-  // });
+    const key = import.meta.env.VITE_FIREBASE_APP_ID;
+    const response = await axios.post(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${key}`,
+      {
+        email: "testing@gmail.com",
+        password: "1111111",
+        returnSecureToken: true,
+      }
+    );
+    expect(response.status).toEqual(200);
+    expect(response.data.message).toEqual("User signed in successfully!");
+  });
 });

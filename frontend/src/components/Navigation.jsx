@@ -42,8 +42,9 @@ function Navigation() {
               </li>
             )}
           </Nav>
-          <h4>{darkMode ? "Dark" : "Light"} Theme</h4>
-          <button onClick={() => dispatch(toggleTheme())}>Toggle Theme</button>
+          <Button variant="info" onClick={() => dispatch(toggleTheme())}>
+            {darkMode ? "Dark" : "Light"} Theme
+          </Button>
         </Navbar.Collapse>
         <ul></ul>
       </Container>

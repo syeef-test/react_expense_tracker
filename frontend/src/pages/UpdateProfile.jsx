@@ -40,8 +40,9 @@ function UpdateProfile() {
         //alert("User details fetched!");
       }
     } catch (error) {
-      console.log(error.response.data.error.message);
-      alert(error.response.data.error.message);
+      console.log(error);
+      //console.log(error.response.data.error.message);
+      //alert(error.response.data.error.message);
     }
   };
 
