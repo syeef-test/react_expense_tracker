@@ -18,10 +18,12 @@ function AddExpense() {
   const dispatch = useDispatch();
   const expenses = useSelector((state) => state.expense.expenses);
   //console.log("map", expenses);
-  const email = localStorage.getItem("email");
-  let cleanedEmail = email.replace(/[@.]/g, "");
+
   const fetchExpenseHandler = async () => {
     try {
+      const email = localStorage.getItem("email");
+      let cleanedEmail = email.replace(/[@.]/g, "");
+
       const response = await axios.get(
         `https://expensetracker-e3c19-default-rtdb.firebaseio.com/${cleanedEmail}.json`
       );
@@ -109,6 +111,7 @@ function AddExpense() {
   const deleteHandler = async (itemId) => {
     try {
       const email = localStorage.getItem("email");
+      let cleanedEmail = email.replace(/[@.]/g, "");
       const response = await axios.delete(
         `https://expensetracker-e3c19-default-rtdb.firebaseio.com/${cleanedEmail}/${itemId}.json`
       );

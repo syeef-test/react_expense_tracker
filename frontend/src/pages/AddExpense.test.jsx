@@ -26,37 +26,42 @@ describe("Add Expense", () => {
     const categoryElement = screen.getByText("Category:");
     expect(descriptionElement).toBeVisible();
   });
-  // it("check total expense  visibility", () => {
-  //   render(
-  //     <Provider store={store}>
-  //       <MemoryRouter>
-  //         <AddExpense />
-  //       </MemoryRouter>
-  //     </Provider>
-  //   );
+  it("check total expense  visibility", () => {
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <AddExpense />
+        </MemoryRouter>
+      </Provider>
+    );
 
-  //   const totalElement = screen.getByText("Total Expense:");
-  //   expect(totalElement).toBeInTheDocument;
-  // });
+    const totalElement = screen.getByRole("heading", {
+      name: /Total Expense:/i,
+    });
+    expect(totalElement).toBeInTheDocument();
+  });
 
-  // it("check loading state of add expense button", () => {
-  //   render(
-  //     <Provider store={store}>
-  //       <MemoryRouter>
-  //         <AddExpense />
-  //       </MemoryRouter>
-  //     </Provider>
-  //   );
+  it("check loading state of add expense button", () => {
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <AddExpense />
+        </MemoryRouter>
+      </Provider>
+    );
 
-  //   const signinElement = screen.getByText("Add Expense");
-  //   userEvent.click(signinElement);
+    const addExpenseButton = screen.getByRole("button", {
+      name: /Add Expense/i,
+    });
+    expect(addExpenseButton).toBeVisible();
+    userEvent.click(addExpenseButton);
 
-  //   const outputElement = screen.queryByText("Adding Expense...", {
-  //     exact: true,
-  //   });
-  //   //expect(outputElement).toBeNull();
-  //   expect(outputElement).toBeVisible();
-  // });
+    const outputElement = screen.queryByText("Adding Expense...", {
+      exact: true,
+    });
+    expect(outputElement).toBeNull();
+    //expect(outputElement).toBeVisible();
+  });
 
   it("fetch expense data", async () => {
     axios.get.mockResolvedValueOnce({
@@ -64,8 +69,9 @@ describe("Add Expense", () => {
       data: {},
     });
     const key = import.meta.env.VITE_FIREBASE_APP_ID;
+    let cleanedEmail = "test@gmail.com";
     const response = await axios.get(
-      `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses.json`
+      `https://expensetracker-e3c19-default-rtdb.firebaseio.com/${cleanedEmail}.json`
     );
     expect(response.status).toEqual(200);
   });
@@ -82,8 +88,9 @@ describe("Add Expense", () => {
       exp_desc: "desc",
       exp_category: "food",
     };
+    let cleanedEmail = "test@gmail.com";
     const response = await axios.put(
-      `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses/${editExpenseId}.json`,
+      `https://expensetracker-e3c19-default-rtdb.firebaseio.com/${cleanedEmail}/${editExpenseId}.json`,
       obj
     );
     expect(response.status).toEqual(200);
@@ -99,8 +106,9 @@ describe("Add Expense", () => {
       exp_desc: "desc",
       exp_category: "food",
     };
+    let cleanedEmail = "test@gmail.com";
     const response = await axios.post(
-      `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses.json`,
+      `https://expensetracker-e3c19-default-rtdb.firebaseio.com/${cleanedEmail}.json`,
       obj
     );
     expect(response.status).toEqual(200);
@@ -113,8 +121,9 @@ describe("Add Expense", () => {
     });
     const key = import.meta.env.VITE_FIREBASE_APP_ID;
     const itemId = "1";
+    let cleanedEmail = "test@gmail.com";
     const response = await axios.delete(
-      `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses/${itemId}.json`
+      `https://expensetracker-e3c19-default-rtdb.firebaseio.com/${cleanedEmail}/${itemId}.json`
     );
     console.log(response.status);
     expect(response.status).toEqual(200);

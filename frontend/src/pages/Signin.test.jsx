@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import store from "../store/index.js";
 import userEvent from "@testing-library/user-event";
 import Profile from "../pages/Profile.jsx";
+
 import { vi } from "vitest";
 import axios from "axios";
 vi.mock("axios");
