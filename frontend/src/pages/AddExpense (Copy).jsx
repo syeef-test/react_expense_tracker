@@ -19,11 +19,10 @@ function AddExpense() {
   const expenses = useSelector((state) => state.expense.expenses);
   //console.log("map", expenses);
   const email = localStorage.getItem("email");
-  let cleanedEmail = email.replace(/[@.]/g, "");
   const fetchExpenseHandler = async () => {
     try {
       const response = await axios.get(
-        `https://expensetracker-e3c19-default-rtdb.firebaseio.com/${cleanedEmail}.json`
+        `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses.json`
       );
       // console.log(response);
       if (response.status === 200) {
@@ -66,7 +65,7 @@ function AddExpense() {
       let cleanedEmail = email.replace(/[@.]/g, "");
       if (editExpenseId !== null) {
         const response = await axios.put(
-          `https://expensetracker-e3c19-default-rtdb.firebaseio.com/${cleanedEmail}/${editExpenseId}.json`,
+          `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses/${editExpenseId}.json`,
           obj
         );
         //console.log("context", response);
@@ -79,7 +78,7 @@ function AddExpense() {
         }
       } else {
         const response = await axios.post(
-          `https://expensetracker-e3c19-default-rtdb.firebaseio.com/${cleanedEmail}.json`,
+          `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses.json`,
           obj
         );
 
@@ -110,7 +109,7 @@ function AddExpense() {
     try {
       const email = localStorage.getItem("email");
       const response = await axios.delete(
-        `https://expensetracker-e3c19-default-rtdb.firebaseio.com/${cleanedEmail}/${itemId}.json`
+        `https://expensetracker-e3c19-default-rtdb.firebaseio.com/expenses/${itemId}.json`
       );
       console.log("context", response.status);
       if (response.status === 200) {
