@@ -18,6 +18,7 @@ import ForgetPassword from "./pages/ForgetPassword";
 import AddExpense from "./pages/AddExpense";
 
 import { useSelector } from "react-redux";
+import Home from "./pages/Home";
 
 function App() {
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
@@ -40,6 +41,9 @@ function App() {
             </Route>
             <Route path="/add_expense">
               <AddExpense />
+            </Route>
+            <Route path="/">
+              <Home />
             </Route>
             <Route path="*">
               <NotFound />
